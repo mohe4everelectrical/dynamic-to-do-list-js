@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Task Creation and Removal:
-        
         // Create a new li element
         const listItem = document.createElement('li');
         
@@ -55,9 +54,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add an event listener to addButton that calls addTask when the button is clicked
     addButton.addEventListener('click', addTask);
     
-    // Add an event listener to taskInput for the 'keypress' event
+    // Add an event listener to taskInput for the 'keypress' event to allow tasks to be added by pressing the "Enter" key
     taskInput.addEventListener('keypress', function(event) {
-        // Check if event.key is equal to 'Enter' before calling addTask
+        // Inside this event listener, check if event.key is equal to 'Enter' before calling addTask
         if (event.key === 'Enter') {
             addTask();
         }
