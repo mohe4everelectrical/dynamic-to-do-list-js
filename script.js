@@ -62,3 +62,75 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const addButton = document.getElementById('add-task-btn');
+    const taskInput = document.getElementById('task-input');
+    const taskList = document.getElementById('task-list');
+    
+    // Initialize and Load Tasks
+    function loadTasks() {
+        const storedTasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+        storedTasks.forEach(taskText => {
+            addTask(taskText, false);
+        });
+    }
+    
+    // Update Task Addition Functionality
+    function addTask(taskText, save = true) {
+        if (typeof taskText === 'string') {
+            taskText = taskText.trim();
+        }
+        
+        if (taskText === "") {
+            alert('Please enter a task!');
+            return;
+        }
+        
+        const listItem = document.createElement('li');
+        listItem.textContent = taskText;
+        
+        const removeButton = document.createElement('button');
+        removeButton.textContent = "Remove";
+        removeButton.className = 'remove-btn';
+        
+        removeButton.onclick = function() {
+            // Implement Task Removal with Local Storage Update
+            taskList.removeChild(listItem);
+            const storedTasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+            const taskIndex = storedTasks.indexOf(taskText);
+            if (taskIndex > -1) {
+                storedTasks.splice(taskIndex, 1);
+                localStorage.setItem('tasks', JSON.stringify(storedTasks));
+            }
+        };
+        
+        listItem.appendChild(removeButton);
+        taskList.appendChild(listItem);
+        
+        // Saving Tasks to Local Storage
+        if (save) {
+            const storedTasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+            storedTasks.push(taskText);
+            localStorage.setItem('tasks', JSON.stringify(storedTasks));
+        }
+        
+        taskInput.value = '';
+    }
+    
+    // Event Listeners
+    addButton.addEventListener('click', function() {
+        const taskText = taskInput.value;
+        addTask(taskText, true);
+    });
+    
+    taskInput.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            const taskText = taskInput.value;
+            addTask(taskText, true);
+        }
+    });
+    
+    // Load tasks when page loads
+    loadTasks();
+});
